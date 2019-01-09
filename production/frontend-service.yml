@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: frontend-service
-  namespace: staging
+  namespace: prod
 spec:
   selector:
     app: frontend-app

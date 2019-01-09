@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: production
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+        - name: crudbackend
+          image: "omarvides/"
+          env:
+            - name: MONGODB_URI
+              value: urlhere
+          ports:
+            - name: http
+              containerPort: 3000

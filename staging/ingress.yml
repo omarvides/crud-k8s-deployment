@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: staging-main
+  namespace: staging
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: crud-staging
+spec:
+  rules:
+  - host: staging.mydomain.tk
+    http:
+      paths:
+      - backend:
+          serviceName: frontend-service
+          servicePort: 80
+  - host: stagingapi.mydomain.tk
+    http:
+      paths:
+      - backend:
+          serviceName: backend-service
+          servicePort: 3000
