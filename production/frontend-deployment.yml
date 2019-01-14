@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: prod
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+        - name: crudfrontend
+          image: "omarvides/crud-challenge-ui:1.0.3"
+          ports:
+            - name: http
+              containerPort: 80

@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: main
+  namespace: prod
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: crud-prod
+spec:
+  tls:
+  - hosts:
+    - crud-challenge.com
+    - api.crud-challenge.com
+    secretName: testsecret-tls
+  rules:
+  - host: crud-challenge.com
+    http:
+      paths:
+      - backend:
+          serviceName: frontend-service
+          servicePort: 80
+  - host: api.crud-challenge.com
+    http:
+      paths:
+      - backend:
+          serviceName: backend-service
+          servicePort: 3000
