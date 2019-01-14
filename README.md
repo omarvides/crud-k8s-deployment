@@ -37,8 +37,65 @@ gcloud container clusters get-credentials crud-challenge-cluster --zone us-centr
 
 ### Steps
 
-1. Run ```sh common/initscript.sh``` to reserve static IPs that will be used by the deployment
+1. Run ```sh common/initscript.sh``` to reserve two static IPv4 that will be used by the deployment (Please notice that this requires a gcloud cli and an existing google cloud account)
+- **WARNING**
+**Please notice that the initscript.sh reserves two static IPv4 on google cloud, if reserve an static IPv4 and don't assign it to a resource Google cloud will charge you per hour it spends not assigned, as shown [here](https://cloud.google.com/compute/pricing), under the Unused IPv4 address pricing section, at the moment of writing of this document the price for unused Static IPv4 is 0.010 US$ per hour, that would mean 14.6 US$ a month if both those IPs are not used**
+
 2. Run ```kubectl apply -f common/namespaces.yml``` to create the namespaces in the cluster
+
+3. Create a secrets.yml file under a directory called secrets on this repository or in some place secure on your computer, with the secrets for both your staging and production database and ssl certificates, you can use the template below
+
+**NOTE:** To encode your secrets use ```echo -n "yoursecrethere" | base64``` in a unix system
+
+**WARNING: THIS REPOSITORY WILL IGNORE ANYTHING YOU PUT UNDER secrets FOLDER, DO NOT COMMIT ANY SECRETS, DOING SO WOULD COMPROMISE YOUR CREDENTIALS EVEN WHEN THEY ARE ENCODED WITH BASE64, THAT IS NO ENCRYPTION METHOD**
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: staging-db
+  namespace: staging
+type: Opaque
+data:
+  dbhost: YOUR_ENCODED_BASE64_SECRET_HERE
+  dbuser: YOUR_ENCODED_BASE64_SECRET_HERE
+  dbpassword: YOUR_ENCODED_BASE64_SECRET_HERE
+  dbport: YOUR_ENCODED_BASE64_SECRET_HERE
+  database: YOUR_ENCODED_BASE64_SECRET_HERE
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: prod-db
+  namespace: prod
+type: Opaque
+data:
+  dbhost: YOUR_ENCODED_BASE64_SECRET_HERE
+  dbuser: YOUR_ENCODED_BASE64_SECRET_HERE
+  dbpassword: YOUR_ENCODED_BASE64_SECRET_HERE
+  dbport: YOUR_ENCODED_BASE64_SECRET_HERE
+  database: YOUR_ENCODED_BASE64_SECRET_HERE
+---
+apiVersion: v1
+data:
+  tls.crt: YOUR_ENCODED_BASE64_SECRET_HERE
+  tls.key: YOUR_ENCODED_BASE64_SECRET_HERE
+kind: Secret
+metadata:
+  name: tls-secret
+  namespace: prod
+type: Opaque
+---
+apiVersion: v1
+data:
+  tls.crt: YOUR_ENCODED_BASE64_SECRET_HERE
+  tls.key: YOUR_ENCODED_BASE64_SECRET_HERE
+kind: Secret
+metadata:
+  name: tls-secret
+  namespace: staging
+type: Opaque
+```
 
 **To deploy to staging**
 

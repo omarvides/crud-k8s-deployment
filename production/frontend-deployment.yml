@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: crudfrontend
-          image: "omarvides/"
+          image: "omarvides/crud-challenge-ui:1.0.3"
           ports:
             - name: http
               containerPort: 80

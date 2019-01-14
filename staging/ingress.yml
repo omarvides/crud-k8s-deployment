@@ -6,14 +6,19 @@ metadata:
   annotations:
     kubernetes.io/ingress.global-static-ip-name: crud-staging
 spec:
+  tls:
+    - hosts:
+      - staging.crud-challenge.com
+      - stagingapi.crud-challenge.com
+      secretName: testsecret-tls
   rules:
-  - host: staging.mydomain.tk
+  - host: staging.crud-challenge.com
     http:
       paths:
       - backend:
           serviceName: frontend-service
           servicePort: 80
-  - host: stagingapi.mydomain.tk
+  - host: stagingapi.crud-challenge.com
     http:
       paths:
       - backend:

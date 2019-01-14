@@ -12,10 +12,34 @@ spec:
     spec:
       containers:
         - name: crudbackend
-          image: "omarvides/"
+          image: "omarvides/crud-challenge:1.0.0"
+          imagePullPolicy: Always
           env:
-            - name: MONGODB_URI
-              value: urlhere
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: staging-db
+                  key: dbhost
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: staging-db
+                  key: dbuser
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: staging-db
+                  key: dbpassword
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: staging-db
+                  key: dbport
+            - name: DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: staging-db
+                  key: database
           ports:
             - name: http
               containerPort: 3000
